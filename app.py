@@ -1,6 +1,7 @@
 #app.py
 
 from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
 import pandas as pd
 import numpy as np
 import skfuzzy as fuzz
@@ -18,6 +19,8 @@ from visualization.fuzzy_graphs import plot_membership_functions
 from preprocessor.csv_preprocessor import InputProcessor
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000", "https://irishdiane.github.io/aegs"])
+
 
 # Configure file upload settings
 UPLOAD_FOLDER = tempfile.gettempdir()
@@ -370,10 +373,6 @@ def fuzzy_graph(criterion):
 @app.route('/')
 def index():
     return "Backend is running."
-
-@app.route('/<path:path>')
-def static_files(path):
-    return send_file(f'../build/{path}')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
