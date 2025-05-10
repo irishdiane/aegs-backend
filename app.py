@@ -369,7 +369,7 @@ def fuzzy_graph(criterion):
     
 @app.route('/')
 def index():
-    return send_file('../build/index.html')
+    return "Backend is running."
 
 @app.route('/<path:path>')
 def static_files(path):
