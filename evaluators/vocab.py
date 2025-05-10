@@ -1,17 +1,17 @@
 import numpy as np
 from collections import Counter
 from sklearn.metrics.pairwise import cosine_similarity
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import string
 from preprocessor.word_expander import load_expanded_vocab
-import nltk
 
 try:
     nltk.data.find('corpora/stopwords')
 except LookupError:
     nltk.download('stopwords')
-    
+
 stop_words = set(stopwords.words("english"))
 expanded_vocab = load_expanded_vocab()
 
