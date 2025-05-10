@@ -1,42 +1,36 @@
-# word2vec_singleton.py
 import os
 import gensim
+import gdown
 
 class Word2VecSingleton:
     _instance = None
     model = None
-    
+
     @classmethod
     def get_instance(cls):
         if cls._instance is None:
             cls._instance = Word2VecSingleton()
             cls._instance.load_model()
         return cls._instance
-    
+
     def load_model(self):
-        bin_path = "flask-server\data\word2vec\GoogleNews-vectors-negative300.bin"
-        kv_path = os.path.join("data", "word2vec", "word2vec_prepared.kv")
-        
-        # Load from the optimized file if it exists
-        if os.path.exists(kv_path):
-            print(f"Loading optimized model from: {kv_path}")
-            self.model = gensim.models.KeyedVectors.load(kv_path)
-        elif os.path.exists(bin_path):
-            # Else, load from binary and save for next time
-            print(f"Loading raw model from: {bin_path}")
-            self.model = gensim.models.KeyedVectors.load_word2vec_format(bin_path, binary=True, limit=1000000)
-            print("Pre-normalizing vectors...")
-            self.model.fill_norms()
+        model_dir = "flask-server/data/word2vec"
+        kv_path = os.path.join(model_dir, "word2vec_prepared.kv")
+        npy_path = kv_path + ".vectors.npy"
 
-            # Ensure save directory exists
-            os.makedirs(os.path.dirname(kv_path), exist_ok=True)
+        os.makedirs(model_dir, exist_ok=True)
 
-            self.model.save(kv_path)
-            print(f"Saved optimized model to: {kv_path}")
-        else:
-            print(f"Model file not found at {bin_path}")
-            self.model = None
-    
+        if not os.path.exists(kv_path) or not os.path.exists(npy_path):
+            print("Downloading .kv and .npy model files from Google Drive...")
+
+            gdown.download(f"https://drive.google.com/uc?id=1rDEb-O982wpqrLswUh5CJvZD7fwnYuuD", kv_path, quiet=False)
+            gdown.download(f"https://drive.google.com/uc?id=1m85AAmRRnoefyYQlyHMSGXd0bE1BI7fy", npy_path, quiet=False)
+
+            print("Download complete.")
+
+        print(f"Loading model from: {kv_path}")
+        self.model = gensim.models.KeyedVectors.load(kv_path)
+
     def get_model(self):
         return self.model
 
