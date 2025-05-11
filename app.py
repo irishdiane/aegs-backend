@@ -1,4 +1,4 @@
-#app.py
+# app.py
 
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
@@ -19,9 +19,9 @@ from visualization.fuzzy_graphs import plot_membership_functions
 from preprocessor.csv_preprocessor import InputProcessor
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000", "https://irishdiane.github.io/aegs"])
+CORS(app, origins=["http://localhost:3000", "https://irishdiane.github.io", "https://irishdiane.github.io/aegs"], supports_credentials=True)
 
-
+# Rest of your Flask app code remains the same...
 # Configure file upload settings
 UPLOAD_FOLDER = tempfile.gettempdir()
 ALLOWED_EXTENSIONS = {'csv'}
