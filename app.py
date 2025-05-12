@@ -370,9 +370,15 @@ def fuzzy_graph(criterion):
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
     
+@app.route('/api/status', methods=['GET', 'OPTIONS'])
+def api_status():
+    return jsonify({"status": "online", "message": "API is operational"})
+
 @app.route('/')
 def index():
-    return "Backend is running."
+    return "Backend is running. API available at /api endpoints."
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # Print a message when server starts to show the URL
+    print("Starting server on http://localhost:5000")
+    app.run(debug=True, host='0.0.0.0', port=5000)
